@@ -123,7 +123,7 @@ def generate_key_schedule(key_bytes):
             print(f"  w5 = w1 ^ w4:  {w1:08x} ^ {w4:08x} = {w5:08x}")
             print(f"  w6 = w2 ^ w5:  {w2:08x} ^ {w5:08x} = {w6:08x}")
             print(f"  w7 = w3 ^ w6:  {w3:08x} ^ {w6:08x} = {w7:08x}")
-            print("-------------------------------------\n")
+            print("-------------------------------------\n\n")
 
         print_key(new_key_bytes, i)
 
@@ -148,7 +148,7 @@ def main():
         print("Errore: La chiave contiene caratteri non validi.")
         sys.exit(1)
 
-    print(f"Simulazione Key Expansion per la chiave: {args.key_hex}\n")
+    print(f"\nSimulazione Key Expansion per la chiave: {args.key_hex}\n")
     generate_key_schedule(key_bytes)
 
 if __name__ == "__main__":
