@@ -172,16 +172,16 @@ if AES128CTR_i_CLK = '1' and AES128CTR_i_CLK' event then
 end if;
 end process;
 
---FF_Input: process(AES128CTR_i_CLK)
---begin
---if AES128CTR_i_CLK = '1' and AES128CTR_i_CLK' event then 
---    if AES128CTR_i_RST = '1' then
---        sv_s_axis_tdata <= ( others => '0' );
---    elsif sv_fsm_loadinput = '1' then
---        sv_s_axis_tdata <= s_axis_tdata;
---    end if;
---end if;
---end process;
+FF_Input: process(AES128CTR_i_CLK)
+begin
+if AES128CTR_i_CLK = '1' and AES128CTR_i_CLK' event then 
+    if AES128CTR_i_RST = '1' then
+        sv_s_axis_tdata <= ( others => '0' );
+    elsif sv_fsm_loadinput = '1' then
+        sv_s_axis_tdata <= s_axis_tdata;
+    end if;
+end if;
+end process;
 
 FF_AES_Feedback: process(AES128CTR_i_CLK)
 begin
@@ -200,7 +200,7 @@ if AES128CTR_i_CLK = '1' and AES128CTR_i_CLK' event then
     if AES128CTR_i_RST = '1' then
         sv_m_axis_tdata <= ( others => '0' );
     elsif sv_fsm_loadoutput = '1' then
-        sv_m_axis_tdata <= sv_aes_output xor s_axis_tdata;
+        sv_m_axis_tdata <= sv_aes_output xor sv_s_axis_tdata;
     end if; 
 end if;
 end process;
@@ -215,6 +215,6 @@ begin
 end process;
 
 m_axis_tdata <= sv_m_axis_tdata;
--- sv_s_axis_tdata <= s_axis_tdata;
+sv_s_axis_tdata <= s_axis_tdata;
 
 end Behavioral;
