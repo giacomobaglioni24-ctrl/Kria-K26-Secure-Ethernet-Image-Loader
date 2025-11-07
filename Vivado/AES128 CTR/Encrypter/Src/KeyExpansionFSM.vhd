@@ -26,31 +26,27 @@ signal sv_next_state: std_logic_vector (3 downto 0);
 
 begin
 
-STATE_UPDATE: process (KEYEXPANSIONFSM_i_CLK)      
+STATE_UPDATE: process (KEYEXPANSIONFSM_i_CLK, KEYEXPANSIONFSM_i_RST)      
 begin
     if KEYEXPANSIONFSM_i_RST = '1' then
         sv_state <= "0000";
     elsif KEYEXPANSIONFSM_i_CLK = '1' and KEYEXPANSIONFSM_i_CLK' event then 
-        --if KEYEXPANSIONFSM_i_EN = '1' then
-            sv_state <= sv_next_state;
-        --end if;
+        sv_state <= sv_next_state;
     end if;
 end process;
 
 
 
-FSM: process (sv_state,KEYEXPANSIONFSM_i_RST)
+FSM: process (sv_state)
 
 begin
-
-    if KEYEXPANSIONFSM_i_RST = '0' then
     
-        KEYEXPANSIONFSM_o_READY <= '0';
-        KEYEXPANSIONFSM_o_LOAD <= '0';
-        KEYEXPANSIONFSM_o_KEYNUMBER <= (others => '0');
-        KEYEXPANSIONFSM_o_ADDRESS <= (others => '0');
-        
-    end if;
+    KEYEXPANSIONFSM_o_READY <= '0';
+    KEYEXPANSIONFSM_o_LOAD <= '0';
+    KEYEXPANSIONFSM_o_KEYNUMBER <= (others => '0');
+    KEYEXPANSIONFSM_o_ADDRESS <= (others => '0');
+    
+    sv_next_state <= "0000";
 
     case sv_state is
     

@@ -31,8 +31,9 @@ end AESFSM;
 
 architecture Behavioral of AESFSM is
 
-signal sv_state: std_logic_vector (4 downto 0) := "00000";
-signal sv_next_state: std_logic_vector (4 downto 0);
+signal sv_state: std_logic_vector (3 downto 0) := "0000";
+signal sv_next_state: std_logic_vector (3 downto 0);
+signal sv_s_axis_tready: std_logic;
 signal sv_s_axis_tlast: std_logic;
 
 
@@ -60,7 +61,7 @@ begin
     AESFSM_o_LOADINPUT  <= '0';
     AESFSM_o_LOADOUTPUT <= '0';
 
-    s_axis_tready       <= '0';
+    sv_s_axis_tready       <= '0';
 
     m_axis_tvalid       <= '0';
     m_axis_tlast        <= '0';
@@ -81,7 +82,7 @@ begin
             if s_axis_tvalid = '1' then
 
                 AESFSM_o_LOADNONCE <= '1';
-                s_axis_tready <= '1';
+                sv_s_axis_tready <= '1';
                 sv_next_state <= "0010";
 
             else
@@ -93,13 +94,13 @@ begin
             m_axis_tvalid <= '0';
             m_axis_tlast <= '0';
 
-            s_axis_tready <= '0';
+            sv_s_axis_tready <= '0';
 
             AESFSM_o_LOADNONCE <= '0';
             
             if s_axis_tvalid = '1' then     
 
-                s_axis_tready <= '1';
+                sv_s_axis_tready <= '1';
                 AESFSM_o_LOADINPUT <= '1';
                 AESFSM_o_KEYNUMBER <= "0000";
                 AESFSM_o_COUNTERINC <= '1';
@@ -112,7 +113,7 @@ begin
 
         when "0011" =>  -- Round 1 
             
-            s_axis_tready <= '0';
+            sv_s_axis_tready <= '0';
 
             AESFSM_o_LOADINPUT <= '0';
             AESFSM_o_COUNTERINC <= '0';
@@ -217,12 +218,14 @@ begin
     end case;
 end process;
 
+s_axis_tready <= sv_s_axis_tready;
+
 TLAST_REGISTER: process(AESFSM_i_CLK, AESFSM_i_RST)
 begin
     if AESFSM_i_RST = '1' then
         sv_s_axis_tlast <= '0';
-    elsif AESFSM_i_CLK = '1' and AESFSM_i_CLK' then
-        if s_axis_tready = '1' and s_axis_tvalid = '1' then
+    elsif AESFSM_i_CLK = '1' and AESFSM_i_CLK' event then
+        if sv_s_axis_tready = '1' and s_axis_tvalid = '1' then
             sv_s_axis_tlast <= s_axis_tlast;
         end if;
     end if;

@@ -71,13 +71,6 @@ begin
         wait for 10 ns;
     end process;
 
---    -- Stimuli Process (da completare)
---    AES128CTR_i_RST <= '1', '0' after 30 ns;
---    s_axis_tvalid <= '1';
---    s_axis_tlast <= '0', '1' after 550 ns;
---    s_axis_tdata <= x"00112233445566778899aabbccddeeff"; --, x"00010203040506070a0b0c0d0e0f" after 270 ns;
---    m_axis_tready <= '0', '1' after 510 ns;
-
 stim_proc: process
 begin
     -- Reset sincrono
@@ -104,6 +97,13 @@ begin
     s_axis_tvalid <= '1';
     s_axis_tlast  <= '0';
     
+    wait until rising_edge(AES128CTR_i_CLK) and s_axis_tready = '1';
+
+    -- Terzo blocco con `tlast` attivo
+    s_axis_tdata  <= x"ffeeddccbbaa99887766554433221100";
+    s_axis_tvalid <= '1';
+    s_axis_tlast  <= '1';
+    
     wait until rising_edge(AES128CTR_i_CLK) and m_axis_tvalid = '1';
 
     wait for 100 ns;
@@ -114,13 +114,6 @@ begin
     wait until rising_edge(AES128CTR_i_CLK);
     
     m_axis_tready <= '0';
-    
-    wait until rising_edge(AES128CTR_i_CLK) and s_axis_tready = '1';
-
-    -- Terzo blocco con `tlast` attivo
-    s_axis_tdata  <= x"ffeeddccbbaa99887766554433221100";
-    s_axis_tvalid <= '1';
-    s_axis_tlast  <= '1';
     
     wait until rising_edge(AES128CTR_i_CLK) and m_axis_tvalid = '1';
 

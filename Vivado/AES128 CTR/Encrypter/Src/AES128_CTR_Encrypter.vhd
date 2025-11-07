@@ -3,7 +3,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 
 
-entity AES128CTR is
+entity AES128_CTR_Encrypter is
 Port ( 
 
     AES128CTR_i_CLK: IN std_logic;
@@ -22,11 +22,11 @@ Port (
     m_axis_tdata            : OUT std_logic_vector(127 downto 0)
     
 );
-end AES128CTR;
+end AES128_CTR_Encrypter;
 
 
 
-architecture Behavioral of AES128CTR is
+architecture Behavioral of AES128_CTR_Encrypter is
 
 component KeyExpansionTop
 Port (
@@ -215,6 +215,5 @@ begin
 end process;
 
 m_axis_tdata <= sv_m_axis_tdata;
-sv_s_axis_tdata <= s_axis_tdata;
 
 end Behavioral;
