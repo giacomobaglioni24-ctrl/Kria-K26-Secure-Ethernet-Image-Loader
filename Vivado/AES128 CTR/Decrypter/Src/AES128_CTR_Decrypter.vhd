@@ -3,11 +3,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 
 
-entity AES128_CTR_Encrypter is
+entity AES128_CTR_Decrypter is
 Port ( 
 
-    AES128CTRENCRYPTER_i_CLK: IN std_logic;
-    AES128CTRENCRYPTER_i_RST: IN std_logic;
+    AES128CTRDECRYPTER_i_CLK: IN std_logic;
+    AES128CTRDECRYPTER_i_RST: IN std_logic;
     
     -- Plaintext Input
     s_axis_tready           : OUT std_logic;
@@ -22,11 +22,11 @@ Port (
     m_axis_tdata            : OUT std_logic_vector(127 downto 0)
     
 );
-end AES128_CTR_Encrypter;
+end AES128_CTR_Decrypter;
 
 
 
-architecture Behavioral of AES128_CTR_Encrypter is
+architecture Behavioral of AES128_CTR_Decrypter is
 
 component KeyExpansionTop
 Port (
@@ -56,7 +56,7 @@ Port (
 );
 end component;
 
-component AESFSM_Encrypter
+component AESFSM_Decrypter
 Port (
     AESFSM_i_CLK         : IN std_logic;
     AESFSM_i_RST         : IN std_logic;
@@ -66,7 +66,6 @@ Port (
     AESFSM_o_BLOCK       : OUT std_logic_vector(1 downto 0);
     AESFSM_o_LOADNONCE: OUT std_logic;
     AESFSM_o_LOADINPUT: OUT std_logic;
-    AESFSM_o_OUTPUTNONCE: OUT std_logic;
     AESFSM_o_LOADOUTPUT: OUT std_logic;
     s_axis_tready        : OUT std_logic;
     s_axis_tvalid        : IN std_logic;
@@ -101,7 +100,6 @@ signal sv_fsm_keynumber     : std_logic_vector(3 downto 0);
 signal sv_fsm_block         : std_logic_vector(1 downto 0);
 signal sv_fsm_loadnonce     : std_logic;
 signal sv_fsm_loadinput     : std_logic;
-signal sv_fsm_outputnonce  : std_logic;
 signal sv_fsm_loadoutput    : std_logic;
 
 signal sv_nonce     : std_logic_vector(63 downto 0);
@@ -116,8 +114,8 @@ begin
 -- Key Expansion
 KEYEXPANSION_Inst : KeyExpansionTop
 port map (
-    KEYEXPASIONTOP_i_CLK       => AES128CTRENCRYPTER_i_CLK,
-    KEYEXPASIONTOP_i_RST       => AES128CTRENCRYPTER_i_RST,
+    KEYEXPASIONTOP_i_CLK       => AES128CTRDECRYPTER_i_CLK,
+    KEYEXPASIONTOP_i_RST       => AES128CTRDECRYPTER_i_RST,
     KEYEXPASIONTOP_i_KEYNUMBER => sv_keynumber,
     KEYEXPASIONTOP_o_READY     => sv_key_ready,
     KEYEXPASIONTOP_o_KEY       => sv_key
@@ -126,8 +124,8 @@ port map (
 -- Counter
 COUNTER_Inst : Counter
 port map (
-    COUNTER_i_CLK    => AES128CTRENCRYPTER_i_CLK,
-    COUNTER_i_RST    => AES128CTRENCRYPTER_i_RST,
+    COUNTER_i_CLK    => AES128CTRDECRYPTER_i_CLK,
+    COUNTER_i_RST    => AES128CTRDECRYPTER_i_RST,
     COUNTER_i_INC    => sv_counter_inc,
     COUNTER_o_OUTPUT => sv_counter_out
 );
@@ -142,17 +140,16 @@ port map (
 );
 
 -- AES FSM
-AESFSM_Inst : AESFSM_Encrypter
+AESFSM_Inst : AESFSM_Decrypter
 port map (
-    AESFSM_i_CLK         => AES128CTRENCRYPTER_i_CLK,
-    AESFSM_i_RST         => AES128CTRENCRYPTER_i_RST,
+    AESFSM_i_CLK         => AES128CTRDECRYPTER_i_CLK,
+    AESFSM_i_RST         => AES128CTRDECRYPTER_i_RST,
     AESFSM_i_KEYREADY    => sv_key_ready,
     AESFSM_o_COUNTERINC  => sv_counter_inc,
     AESFSM_o_KEYNUMBER   => sv_keynumber,
     AESFSM_o_BLOCK       => sv_fsm_block,
     AESFSM_o_LOADNONCE   => sv_fsm_loadnonce,
     AESFSM_o_LOADINPUT   => sv_fsm_loadinput,
-    AESFSM_o_OUTPUTNONCE => sv_fsm_outputnonce, 
     AESFSM_o_LOADOUTPUT  => sv_fsm_loadoutput,
     s_axis_tready        => s_axis_tready,
     s_axis_tvalid        => s_axis_tvalid,
@@ -164,10 +161,10 @@ port map (
 
 
 
-FF_Nonce: process(AES128CTRENCRYPTER_i_CLK)
+FF_Nonce: process(AES128CTRDECRYPTER_i_CLK)
 begin
-if AES128CTRENCRYPTER_i_CLK = '1' and AES128CTRENCRYPTER_i_CLK' event then 
-    if AES128CTRENCRYPTER_i_RST = '1' then
+if AES128CTRDECRYPTER_i_CLK = '1' and AES128CTRDECRYPTER_i_CLK' event then 
+    if AES128CTRDECRYPTER_i_RST = '1' then
         sv_nonce <= ( others => '0' );
     elsif sv_fsm_loadnonce = '1' then
         sv_nonce <= s_axis_tdata(127 downto 64);
@@ -175,10 +172,10 @@ if AES128CTRENCRYPTER_i_CLK = '1' and AES128CTRENCRYPTER_i_CLK' event then
 end if;
 end process;
 
-FF_Input: process(AES128CTRENCRYPTER_i_CLK)
+FF_Input: process(AES128CTRDECRYPTER_i_CLK)
 begin
-if AES128CTRENCRYPTER_i_CLK = '1' and AES128CTRENCRYPTER_i_CLK' event then 
-    if AES128CTRENCRYPTER_i_RST = '1' then
+if AES128CTRDECRYPTER_i_CLK = '1' and AES128CTRDECRYPTER_i_CLK' event then 
+    if AES128CTRDECRYPTER_i_RST = '1' then
         sv_s_axis_tdata <= ( others => '0' );
     elsif sv_fsm_loadinput = '1' then
         sv_s_axis_tdata <= s_axis_tdata;
@@ -186,10 +183,10 @@ if AES128CTRENCRYPTER_i_CLK = '1' and AES128CTRENCRYPTER_i_CLK' event then
 end if;
 end process;
 
-FF_AES_Feedback: process(AES128CTRENCRYPTER_i_CLK)
+FF_AES_Feedback: process(AES128CTRDECRYPTER_i_CLK)
 begin
-if AES128CTRENCRYPTER_i_CLK = '1' and AES128CTRENCRYPTER_i_CLK' event then 
-    if AES128CTRENCRYPTER_i_RST = '1' then
+if AES128CTRDECRYPTER_i_CLK = '1' and AES128CTRDECRYPTER_i_CLK' event then 
+    if AES128CTRDECRYPTER_i_RST = '1' then
         sv_aes_feedback <= ( others => '0' );
     else
         sv_aes_feedback <= sv_aes_output;
@@ -197,17 +194,13 @@ if AES128CTRENCRYPTER_i_CLK = '1' and AES128CTRENCRYPTER_i_CLK' event then
 end if;
 end process;
 
-FF_Output: process(AES128CTRENCRYPTER_i_CLK)
+FF_Output: process(AES128CTRDECRYPTER_i_CLK)
 begin
-if AES128CTRENCRYPTER_i_CLK = '1' and AES128CTRENCRYPTER_i_CLK' event then 
-    if AES128CTRENCRYPTER_i_RST = '1' then
+if AES128CTRDECRYPTER_i_CLK = '1' and AES128CTRDECRYPTER_i_CLK' event then 
+    if AES128CTRDECRYPTER_i_RST = '1' then
         sv_m_axis_tdata <= ( others => '0' );
     elsif sv_fsm_loadoutput = '1' then
-        if sv_fsm_outputnonce = '1' then
-            sv_m_axis_tdata <= s_axis_tdata;
-        else
-            sv_m_axis_tdata <= sv_aes_output xor sv_s_axis_tdata;
-        end if;
+        sv_m_axis_tdata <= sv_aes_output xor sv_s_axis_tdata;
     end if; 
 end if;
 end process;

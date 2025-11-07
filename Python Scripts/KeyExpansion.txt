@@ -1,0 +1,15 @@
+cd C:\Users\stage_gbaglioni\Desktop\Tesi\Python Scripts
+
+python key_expansion_sim.py -k 000102030405060708090a0b0c0d0e0f
+
+
+
+compile all
+
+vsim work.tb_KeyExtensionTop
+
+add wave -r *
+
+run 1us
+
+quit -sim

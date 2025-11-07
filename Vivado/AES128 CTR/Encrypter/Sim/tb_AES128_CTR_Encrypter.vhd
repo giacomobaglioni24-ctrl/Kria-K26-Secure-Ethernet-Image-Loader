@@ -4,18 +4,18 @@ use ieee.numeric_std.all;
 
 
 
-entity tb_AES128CTR is
-end tb_AES128CTR;
+entity tb_AES128_CTR_Encrypter is
+end tb_AES128_CTR_Encrypter;
 
 
 
-architecture Behavioral of tb_AES128CTR is
+architecture Behavioral of tb_AES128_CTR_Encrypter is
 
     -- Component Declaration
-    component AES128CTR
+    component AES128_CTR_Encrypter
         port (
-            AES128CTR_i_CLK     : in  std_logic;
-            AES128CTR_i_RST     : in  std_logic;
+            AES128CTRENCRYPTER_i_CLK     : in  std_logic;
+            AES128CTRENCRYPTER_i_RST     : in  std_logic;
 
             -- Plaintext Input
             s_axis_tready       : out std_logic;
@@ -32,8 +32,8 @@ architecture Behavioral of tb_AES128CTR is
     end component;
 
     -- Signal Declarations
-    signal AES128CTR_i_CLK     : std_logic;
-    signal AES128CTR_i_RST     : std_logic;
+    signal AES128CTRENCRYPTER_i_CLK     : std_logic;
+    signal AES128CTRENCRYPTER_i_RST     : std_logic;
 
     signal s_axis_tready       : std_logic;
     signal s_axis_tvalid       : std_logic;
@@ -48,10 +48,10 @@ architecture Behavioral of tb_AES128CTR is
 begin
 
     -- DUT Instantiation
-    uut: AES128CTR
+    uut: AES128_CTR_Encrypter
         port map (
-            AES128CTR_i_CLK     => AES128CTR_i_CLK,
-            AES128CTR_i_RST     => AES128CTR_i_RST,
+            AES128CTRENCRYPTER_i_CLK     => AES128CTRENCRYPTER_i_CLK,
+            AES128CTRENCRYPTER_i_RST     => AES128CTRENCRYPTER_i_RST,
             s_axis_tready       => s_axis_tready,
             s_axis_tvalid       => s_axis_tvalid,
             s_axis_tlast        => s_axis_tlast,
@@ -65,26 +65,26 @@ begin
     -- Clock Generation
     clk_process : process
     begin
-        AES128CTR_i_CLK <= '0';
+        AES128CTRENCRYPTER_i_CLK <= '0';
         wait for 10 ns;
-        AES128CTR_i_CLK <= '1';
+        AES128CTRENCRYPTER_i_CLK <= '1';
         wait for 10 ns;
     end process;
 
 stim_proc: process
 begin
     -- Reset sincrono
-    AES128CTR_i_RST <= '1';
-    wait until rising_edge(AES128CTR_i_CLK);
-    wait until rising_edge(AES128CTR_i_CLK);
-    AES128CTR_i_RST <= '0';
+    AES128CTRENCRYPTER_i_RST <= '1';
+    wait until rising_edge(AES128CTRENCRYPTER_i_CLK);
+    wait until rising_edge(AES128CTRENCRYPTER_i_CLK);
+    AES128CTRENCRYPTER_i_RST <= '0';
     
     -- Primo blocco
     s_axis_tdata  <= x"00112233445566778899aabbccddeeff";
     s_axis_tvalid <= '1';
     s_axis_tlast  <= '0';
     m_axis_tready <= '0';
-    wait until rising_edge(AES128CTR_i_CLK) and s_axis_tready = '1';
+    wait until rising_edge(AES128CTRENCRYPTER_i_CLK) and s_axis_tready = '1';
     
     s_axis_tdata  <= (Others => 'Z');
     s_axis_tvalid <= '0';
@@ -97,33 +97,44 @@ begin
     s_axis_tvalid <= '1';
     s_axis_tlast  <= '0';
     
-    wait until rising_edge(AES128CTR_i_CLK) and s_axis_tready = '1';
+    wait until rising_edge(AES128CTRENCRYPTER_i_CLK) and m_axis_tvalid = '1';
+
+    wait for 100 ns;
+    wait until rising_edge(AES128CTRENCRYPTER_i_CLK);
+
+    m_axis_tready <= '1';
+    
+    wait until rising_edge(AES128CTRENCRYPTER_i_CLK);
+    
+    m_axis_tready <= '0';
+    
+    wait until rising_edge(AES128CTRENCRYPTER_i_CLK) and s_axis_tready = '1';
 
     -- Terzo blocco con `tlast` attivo
     s_axis_tdata  <= x"ffeeddccbbaa99887766554433221100";
     s_axis_tvalid <= '1';
     s_axis_tlast  <= '1';
     
-    wait until rising_edge(AES128CTR_i_CLK) and m_axis_tvalid = '1';
+    wait until rising_edge(AES128CTRENCRYPTER_i_CLK) and m_axis_tvalid = '1';
 
     wait for 100 ns;
-    wait until rising_edge(AES128CTR_i_CLK);
+    wait until rising_edge(AES128CTRENCRYPTER_i_CLK);
 
     m_axis_tready <= '1';
     
-    wait until rising_edge(AES128CTR_i_CLK);
+    wait until rising_edge(AES128CTRENCRYPTER_i_CLK);
     
     m_axis_tready <= '0';
     
-    wait until rising_edge(AES128CTR_i_CLK) and m_axis_tvalid = '1';
+    wait until rising_edge(AES128CTRENCRYPTER_i_CLK) and m_axis_tvalid = '1';
 
     m_axis_tready <= '1';
     
-    wait until rising_edge(AES128CTR_i_CLK);
+    wait until rising_edge(AES128CTRENCRYPTER_i_CLK);
     
     m_axis_tready <= '0';
     
-    wait until rising_edge(AES128CTR_i_CLK) and s_axis_tready = '1';
+    wait until rising_edge(AES128CTRENCRYPTER_i_CLK) and s_axis_tready = '1';
 
     -- Fine trasmissione
     s_axis_tvalid <= '0';

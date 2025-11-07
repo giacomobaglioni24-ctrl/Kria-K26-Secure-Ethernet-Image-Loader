@@ -3,7 +3,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 
 
-entity AESFSM is
+entity AESFSM_Decrypter is
 Port ( 
     AESFSM_i_CLK: IN std_logic;
     AESFSM_i_RST: IN std_logic;
@@ -25,11 +25,11 @@ Port (
     m_axis_tvalid           : OUT STD_LOGIC;
     m_axis_tlast            : OUT STD_LOGIC
 );
-end AESFSM;
+end AESFSM_Decrypter;
 
 
 
-architecture Behavioral of AESFSM is
+architecture Behavioral of AESFSM_Decrypter is
 
 signal sv_state: std_logic_vector (3 downto 0) := "0000";
 signal sv_next_state: std_logic_vector (3 downto 0);
@@ -231,4 +231,4 @@ begin
     end if;
 end process;
 
-end Behavioral;
+end behavioral;
