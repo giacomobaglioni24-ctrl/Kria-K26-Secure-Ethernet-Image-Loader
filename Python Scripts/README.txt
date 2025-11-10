@@ -30,6 +30,8 @@ python .\ctr_encrypt.py -i plaintext.txt -o chipertext.txt -k 001122334455667788
 
 print_hex.py - Per leggere il contenuto in Hex
 
+cd C:\Users\stage_gbaglioni\Desktop\Tesi\Python Scripts
+
 python print_hex.py -i plaintext.txt
 
 python print_hex.py -i chipertext.txt
@@ -40,5 +42,27 @@ python print_hex.py -i chipertext.txt
 
 write_hex.py - Per scrivere il contenuto in Hex 
 
+cd C:\Users\stage_gbaglioni\Desktop\Tesi\Python Scripts
+
 python write_hex.py -x "000102030405060708090A0B0C0D0E0F" -o plaintext.txt
+
+
+
+
+
+encrypt.py - Per criptare tramite AES128-CTR, scegliendo solamente la chiave, il nonce viene generato randomicamente
+
+cd C:\Users\stage_gbaglioni\Desktop\Tesi\Python Scripts
+
+python encrypt.py -i plaintext.txt -o chipertext.txt -k 00112233445566778899aabbccddeeff
+
+
+
+
+
+encapsulate.py - Incapsula la richiesta, il nonce e il chipertext (Si calcola la lunghezza del file di output in automatico)
+
+cd C:\Users\stage_gbaglioni\Desktop\Tesi\Python Scripts
+
+python .\encapsulate.py -p "POST/Upload_img_A/" -x "000102030405060708090a0b0c0d0e0f" -i "chipertext.txt" -o "fullmessage.bin"
 
