@@ -21,12 +21,14 @@ architecture Behavioral of tb_AES128_CTR_Decrypter is
             s_axis_tready       : out std_logic;
             s_axis_tvalid       : in  std_logic;
             s_axis_tlast        : in  std_logic;
+            s_axis_tkeep        : in  std_logic_vector(15 downto 0);
             s_axis_tdata        : in  std_logic_vector(127 downto 0);
 
             -- Ciphertext Output
             m_axis_tready       : in  std_logic;
             m_axis_tvalid       : out std_logic;
             m_axis_tlast        : out std_logic;
+            m_axis_tkeep        : out std_logic_vector(15 downto 0);
             m_axis_tdata        : out std_logic_vector(127 downto 0)
         );
     end component;
@@ -38,11 +40,13 @@ architecture Behavioral of tb_AES128_CTR_Decrypter is
     signal s_axis_tready       : std_logic;
     signal s_axis_tvalid       : std_logic;
     signal s_axis_tlast        : std_logic;
+    signal s_axis_tkeep        : std_logic_vector(15 downto 0);
     signal s_axis_tdata        : std_logic_vector(127 downto 0);
 
     signal m_axis_tready       : std_logic;
     signal m_axis_tvalid       : std_logic;
     signal m_axis_tlast        : std_logic;
+    signal m_axis_tkeep        : std_logic_vector(15 downto 0);
     signal m_axis_tdata        : std_logic_vector(127 downto 0);
 
 begin
@@ -56,9 +60,11 @@ begin
             s_axis_tvalid       => s_axis_tvalid,
             s_axis_tlast        => s_axis_tlast,
             s_axis_tdata        => s_axis_tdata,
+            s_axis_tkeep        => s_axis_tkeep,
             m_axis_tready       => m_axis_tready,
             m_axis_tvalid       => m_axis_tvalid,
             m_axis_tlast        => m_axis_tlast,
+            m_axis_tkeep        => m_axis_tkeep,
             m_axis_tdata        => m_axis_tdata
         );
 
@@ -71,16 +77,18 @@ begin
         wait for 10 ns;
     end process;
 
+AES128CTRDECRYPTER_i_RST <= '1';
+
 stim_proc: process
 begin
     -- Reset sincrono
-    AES128CTRDECRYPTER_i_RST <= '1';
-    wait until rising_edge(AES128CTRDECRYPTER_i_CLK);
-    wait until rising_edge(AES128CTRDECRYPTER_i_CLK);
-    AES128CTRDECRYPTER_i_RST <= '0';
+--    AES128CTRDECRYPTER_i_RST <= '1';
+--    wait until rising_edge(AES128CTRDECRYPTER_i_CLK);
+--    wait until rising_edge(AES128CTRDECRYPTER_i_CLK);
+--    AES128CTRDECRYPTER_i_RST <= '0';
     
     -- Primo blocco
-    s_axis_tdata  <= x"00112233445566778899aabbccddeeff";
+    s_axis_tdata  <= x"a6efda5edc73cebf60c3eed479049c73";
     s_axis_tvalid <= '1';
     s_axis_tlast  <= '0';
     m_axis_tready <= '0';
@@ -93,14 +101,14 @@ begin
     wait for 500 ns;
 
     -- Secondo blocco
-    s_axis_tdata  <= x"F7A9F8D2118DD45C11E29F2C2BDA8131";
+    s_axis_tdata  <= x"b6438f5118665c409dfc3ac56a9a0e45";
     s_axis_tvalid <= '1';
     s_axis_tlast  <= '0';
     
     wait until rising_edge(AES128CTRDECRYPTER_i_CLK) and s_axis_tready = '1';
 
     -- Terzo blocco con `tlast` attivo
-    s_axis_tdata  <= x"D786F14BF49F8726D4717AB0348AA828";
+    s_axis_tdata  <= x"70e55358c9859e30106a9a9df4c0a039";
     s_axis_tvalid <= '1';
     s_axis_tlast  <= '1';
     

@@ -10,6 +10,7 @@ Port (
 --    KEYEXPANSIONFSM_i_EN: IN std_logic;
     KEYEXPANSIONFSM_o_READY: OUT std_logic;   
     KEYEXPANSIONFSM_o_LOAD: OUT std_logic;   
+    KEYEXPANSIONFSM_o_SAVE: OUT std_logic;  
     KEYEXPANSIONFSM_o_KEYNUMBER: OUT std_logic_vector( 3 downto 0 );
     KEYEXPANSIONFSM_o_ADDRESS: OUT std_logic_vector( 3 downto 0 )     
 );
@@ -43,6 +44,7 @@ begin
     
     KEYEXPANSIONFSM_o_READY <= '0';
     KEYEXPANSIONFSM_o_LOAD <= '0';
+    KEYEXPANSIONFSM_o_SAVE <= '0';
     KEYEXPANSIONFSM_o_KEYNUMBER <= (others => '0');
     KEYEXPANSIONFSM_o_ADDRESS <= (others => '0');
     
@@ -54,6 +56,7 @@ begin
 
             KEYEXPANSIONFSM_o_READY <= '0';
             KEYEXPANSIONFSM_o_LOAD <= '0';
+            KEYEXPANSIONFSM_o_SAVE <= '0';
             KEYEXPANSIONFSM_o_ADDRESS <= sv_state;
             KEYEXPANSIONFSM_o_KEYNUMBER <= sv_state;
 
@@ -61,19 +64,16 @@ begin
             
         when "0001" =>     
         
-            KEYEXPANSIONFSM_o_READY <= '0';
-            KEYEXPANSIONFSM_o_LOAD <= '1';
-            KEYEXPANSIONFSM_o_ADDRESS <= sv_state;
-            KEYEXPANSIONFSM_o_KEYNUMBER <= sv_state;
+            KEYEXPANSIONFSM_o_SAVE <= '1';
             
             sv_next_state <= "0010";
             
         when "0010" =>        
         
-            KEYEXPANSIONFSM_o_READY <= '0';
             KEYEXPANSIONFSM_o_LOAD <= '1';
-            KEYEXPANSIONFSM_o_ADDRESS <= sv_state;
-            KEYEXPANSIONFSM_o_KEYNUMBER <= sv_state;
+            KEYEXPANSIONFSM_o_SAVE <= '1';
+            KEYEXPANSIONFSM_o_ADDRESS <= "0001";
+            KEYEXPANSIONFSM_o_KEYNUMBER <= "0001";
 
             sv_next_state <= "0011";
                                 
@@ -81,8 +81,9 @@ begin
 
             KEYEXPANSIONFSM_o_READY <= '0';
             KEYEXPANSIONFSM_o_LOAD <= '1';
-            KEYEXPANSIONFSM_o_ADDRESS <= sv_state;
-            KEYEXPANSIONFSM_o_KEYNUMBER <= sv_state;        
+            KEYEXPANSIONFSM_o_SAVE <= '1';
+            KEYEXPANSIONFSM_o_ADDRESS <= "0010";
+            KEYEXPANSIONFSM_o_KEYNUMBER <= "0010";        
                 
             sv_next_state <= "0100";
 
@@ -90,8 +91,9 @@ begin
             
             KEYEXPANSIONFSM_o_READY <= '0';
             KEYEXPANSIONFSM_o_LOAD <= '1';
-            KEYEXPANSIONFSM_o_ADDRESS <= sv_state;
-            KEYEXPANSIONFSM_o_KEYNUMBER <= sv_state; 
+            KEYEXPANSIONFSM_o_SAVE <= '1';
+            KEYEXPANSIONFSM_o_ADDRESS <= "0011";
+            KEYEXPANSIONFSM_o_KEYNUMBER <= "0011"; 
 
             sv_next_state <= "0101";
             
@@ -99,8 +101,9 @@ begin
 
             KEYEXPANSIONFSM_o_READY <= '0';
             KEYEXPANSIONFSM_o_LOAD <= '1';
-            KEYEXPANSIONFSM_o_ADDRESS <= sv_state;
-            KEYEXPANSIONFSM_o_KEYNUMBER <= sv_state; 
+            KEYEXPANSIONFSM_o_SAVE <= '1';
+            KEYEXPANSIONFSM_o_ADDRESS <= "0100";
+            KEYEXPANSIONFSM_o_KEYNUMBER <= "0100"; 
             
             sv_next_state <= "0110";
 
@@ -108,8 +111,9 @@ begin
 
             KEYEXPANSIONFSM_o_READY <= '0';
             KEYEXPANSIONFSM_o_LOAD <= '1';
-            KEYEXPANSIONFSM_o_ADDRESS <= sv_state;
-            KEYEXPANSIONFSM_o_KEYNUMBER <= sv_state; 
+            KEYEXPANSIONFSM_o_SAVE <= '1';
+            KEYEXPANSIONFSM_o_ADDRESS <= "0101";
+            KEYEXPANSIONFSM_o_KEYNUMBER <= "0101"; 
 
             sv_next_state <= "0111";
 
@@ -117,8 +121,9 @@ begin
 
             KEYEXPANSIONFSM_o_READY <= '0';
             KEYEXPANSIONFSM_o_LOAD <= '1';
-            KEYEXPANSIONFSM_o_ADDRESS <= sv_state;
-            KEYEXPANSIONFSM_o_KEYNUMBER <= sv_state; 
+            KEYEXPANSIONFSM_o_SAVE <= '1';
+            KEYEXPANSIONFSM_o_ADDRESS <= "0110";
+            KEYEXPANSIONFSM_o_KEYNUMBER <= "0110"; 
 
             sv_next_state <= "1000";
 
@@ -126,8 +131,9 @@ begin
 
             KEYEXPANSIONFSM_o_READY <= '0';
             KEYEXPANSIONFSM_o_LOAD <= '1';
-            KEYEXPANSIONFSM_o_ADDRESS <= sv_state;
-            KEYEXPANSIONFSM_o_KEYNUMBER <= sv_state; 
+            KEYEXPANSIONFSM_o_SAVE <= '1';
+            KEYEXPANSIONFSM_o_ADDRESS <= "0111";
+            KEYEXPANSIONFSM_o_KEYNUMBER <= "0111"; 
 
             sv_next_state <= "1001";
 
@@ -135,8 +141,9 @@ begin
 
             KEYEXPANSIONFSM_o_READY <= '0';
             KEYEXPANSIONFSM_o_LOAD <= '1';
-            KEYEXPANSIONFSM_o_ADDRESS <= sv_state;
-            KEYEXPANSIONFSM_o_KEYNUMBER <= sv_state; 
+            KEYEXPANSIONFSM_o_SAVE <= '1';
+            KEYEXPANSIONFSM_o_ADDRESS <= "1000";
+            KEYEXPANSIONFSM_o_KEYNUMBER <= "1000"; 
 
             sv_next_state <= "1010";
 
@@ -144,29 +151,42 @@ begin
 
             KEYEXPANSIONFSM_o_READY <= '0';
             KEYEXPANSIONFSM_o_LOAD <= '1';
-            KEYEXPANSIONFSM_o_ADDRESS <= sv_state;
-            KEYEXPANSIONFSM_o_KEYNUMBER <= sv_state; 
+            KEYEXPANSIONFSM_o_SAVE <= '1';
+            KEYEXPANSIONFSM_o_ADDRESS <= "1001";
+            KEYEXPANSIONFSM_o_KEYNUMBER <= "1001"; 
 
             sv_next_state <= "1011";
 
         when "1011" =>
 
-            KEYEXPANSIONFSM_o_READY <= '1';
-            KEYEXPANSIONFSM_o_LOAD <= '0';
-            KEYEXPANSIONFSM_o_ADDRESS <= "0000";
-            KEYEXPANSIONFSM_o_KEYNUMBER <= "0000"; 
+            KEYEXPANSIONFSM_o_LOAD <= '1';
+            KEYEXPANSIONFSM_o_SAVE <= '1';
+            KEYEXPANSIONFSM_o_ADDRESS <= "1010";
+            KEYEXPANSIONFSM_o_KEYNUMBER <= "1010"; 
 
             sv_next_state <= "1100";
 
         when "1100" =>
 
+            KEYEXPANSIONFSM_o_LOAD <= '0';
+            KEYEXPANSIONFSM_o_SAVE <= '0';
+            KEYEXPANSIONFSM_o_ADDRESS <= "0000";
+            KEYEXPANSIONFSM_o_KEYNUMBER <= "0000";
+
             KEYEXPANSIONFSM_o_READY <= '1';
 
-            sv_next_state <= "1100";
+            sv_next_state <= "1101";
 
         when "1101" =>
 
-            NULL;
+            KEYEXPANSIONFSM_o_LOAD <= '0';
+            KEYEXPANSIONFSM_o_SAVE <= '0';
+            KEYEXPANSIONFSM_o_ADDRESS <= "0000";
+            KEYEXPANSIONFSM_o_KEYNUMBER <= "0000";
+            
+            KEYEXPANSIONFSM_o_READY <= '1';
+
+            sv_next_state <= "1101";
 
         when "1110" =>
 

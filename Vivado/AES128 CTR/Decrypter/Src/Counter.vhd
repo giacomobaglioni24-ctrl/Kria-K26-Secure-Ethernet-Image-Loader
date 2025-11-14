@@ -17,7 +17,7 @@ end Counter;
 
 architecture Behavioral of Counter is
 
-signal sv_counter: std_logic_vector ( 63 downto 0 );
+signal sv_counter: std_logic_vector ( 63 downto 0 ) := ( Others => '0' );
 
 
 

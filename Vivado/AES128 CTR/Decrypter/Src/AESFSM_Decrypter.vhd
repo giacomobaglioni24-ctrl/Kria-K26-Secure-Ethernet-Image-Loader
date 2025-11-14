@@ -220,6 +220,7 @@ end process;
 
 s_axis_tready <= sv_s_axis_tready;
 
+-- Flip-Flop per salvataggio  TLAST
 TLAST_REGISTER: process(AESFSM_i_CLK, AESFSM_i_RST)
 begin
     if AESFSM_i_RST = '1' then

@@ -33,7 +33,8 @@ package KeyExpansionTop_pkg is
       KEYEXPANSIONFSM_i_CLK       : in  std_logic;
       KEYEXPANSIONFSM_i_RST       : in  std_logic;
       KEYEXPANSIONFSM_o_READY     : out std_logic;
-      KEYEXPANSIONFSM_o_LOAD        : out std_logic;
+      KEYEXPANSIONFSM_o_LOAD      : out std_logic;
+      KEYEXPANSIONFSM_o_SAVE      : out std_logic;
       KEYEXPANSIONFSM_o_KEYNUMBER : out std_logic_vector(3 downto 0);
       KEYEXPANSIONFSM_o_ADDRESS   : out std_logic_vector(3 downto 0)
     );

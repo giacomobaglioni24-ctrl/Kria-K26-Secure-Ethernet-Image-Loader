@@ -20,6 +20,7 @@ architecture Behavioral of KeyExpansionTop is
 
 signal sv_ready: std_logic;
 signal sv_load: std_logic;
+signal sv_save: std_logic;
 signal sv_key_number: std_logic_vector ( 3 downto 0 );
 signal sv_key_address: std_logic_vector ( 3 downto 0 );
 signal sv_key_address_to_register: std_logic_vector ( 3 downto 0 );
@@ -52,6 +53,7 @@ port map (
   KEYEXPANSIONFSM_i_RST       => KEYEXPASIONTOP_i_RST,
   KEYEXPANSIONFSM_o_READY     => sv_ready,
   KEYEXPANSIONFSM_o_LOAD        => sv_load,
+  KEYEXPANSIONFSM_o_SAVE    =>  sv_save,
   KEYEXPANSIONFSM_o_KEYNUMBER => sv_key_number,
   KEYEXPANSIONFSM_o_ADDRESS   => sv_key_address
 );
@@ -74,10 +76,12 @@ begin
     if KEYEXPASIONTOP_i_CLK = '1' and KEYEXPASIONTOP_i_CLK' event then
         if KEYEXPASIONTOP_i_RST = '1' then
             sv_current_key <= ( others => '0' );
-        elsif sv_load = '1' then
-            sv_current_key <= sv_processed_key;
-        else
-            sv_current_key <= sv_output_key;
+        elsif sv_save = '1' then
+            if sv_load = '1' then
+                sv_current_key <= sv_processed_key;
+            else
+                sv_current_key <= sv_output_key;
+            end if;
         end if;
     end if; 
 end process FF_Key;

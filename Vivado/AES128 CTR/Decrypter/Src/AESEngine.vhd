@@ -55,6 +55,7 @@ port map (
     ADDROUNDKEY_o_OUTPUT => AESENGINE_o_OUTPUT
 );
 
+-- Mux che seleziona l'input per l'AddRoundKey in base al blocco corrente
 MUX: process(sv_mix_output, sv_shift_to_mix,AESENGINE_i_BLOCK , AESENGINE_i_INPUT) 
 begin
     case AESENGINE_i_BLOCK is
