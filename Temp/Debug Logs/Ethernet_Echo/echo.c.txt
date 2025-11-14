@@ -1,0 +1,167 @@
+Risultati CMD:
+
+PS C:\Users\stage_gbaglioni> netstat
+
+Connessioni attive
+
+  Proto  Indirizzo locale       Indirizzo esterno       Stato
+  TCP    127.0.0.1:3121         ELT-16008422:62523     ESTABLISHED
+  TCP    127.0.0.1:3121         ELT-16008422:62526     ESTABLISHED
+  TCP    127.0.0.1:8088         ELT-16008422:61090     ESTABLISHED
+  TCP    127.0.0.1:49675        ELT-16008422:55552     ESTABLISHED
+  TCP    127.0.0.1:49679        ELT-16008422:49680     ESTABLISHED
+  TCP    127.0.0.1:49680        ELT-16008422:49679     ESTABLISHED
+  TCP    127.0.0.1:49742        ELT-16008422:49743     ESTABLISHED
+  TCP    127.0.0.1:49743        ELT-16008422:49742     ESTABLISHED
+  TCP    127.0.0.1:49744        ELT-16008422:49745     ESTABLISHED
+  TCP    127.0.0.1:49745        ELT-16008422:49744     ESTABLISHED
+  TCP    127.0.0.1:49746        ELT-16008422:49747     ESTABLISHED
+  TCP    127.0.0.1:49747        ELT-16008422:49746     ESTABLISHED
+  TCP    127.0.0.1:55296        ELT-16008422:62536     TIME_WAIT
+  TCP    127.0.0.1:55296        ELT-16008422:62537     TIME_WAIT
+  TCP    127.0.0.1:55296        ELT-16008422:62538     TIME_WAIT
+  TCP    127.0.0.1:55296        ELT-16008422:62539     TIME_WAIT
+  TCP    127.0.0.1:55296        ELT-16008422:62540     TIME_WAIT
+  TCP    127.0.0.1:55296        ELT-16008422:62542     TIME_WAIT
+  TCP    127.0.0.1:55296        ELT-16008422:62543     TIME_WAIT
+  TCP    127.0.0.1:55296        ELT-16008422:62546     TIME_WAIT
+  TCP    127.0.0.1:55552        ELT-16008422:49675     ESTABLISHED
+  TCP    127.0.0.1:55552        ELT-16008422:63008     ESTABLISHED
+  TCP    127.0.0.1:60010        ELT-16008422:60285     ESTABLISHED
+  TCP    127.0.0.1:60012        ELT-16008422:62402     ESTABLISHED
+  TCP    127.0.0.1:60014        ELT-16008422:62401     ESTABLISHED
+  TCP    127.0.0.1:60285        ELT-16008422:60010     ESTABLISHED
+  TCP    127.0.0.1:60286        ELT-16008422:62522     ESTABLISHED
+  TCP    127.0.0.1:61090        ELT-16008422:8088      ESTABLISHED
+  TCP    127.0.0.1:62401        ELT-16008422:60014     ESTABLISHED
+  TCP    127.0.0.1:62402        ELT-16008422:60012     ESTABLISHED
+  TCP    127.0.0.1:62459        ELT-16008422:62460     ESTABLISHED
+  TCP    127.0.0.1:62460        ELT-16008422:62459     ESTABLISHED
+  TCP    127.0.0.1:62522        ELT-16008422:60286     ESTABLISHED
+  TCP    127.0.0.1:62523        ELT-16008422:3121      ESTABLISHED
+  TCP    127.0.0.1:62526        ELT-16008422:3121      ESTABLISHED
+  TCP    127.0.0.1:63008        ELT-16008422:55552     ESTABLISHED
+  TCP    192.168.1.15:62534     192.168.1.10:echo      ESTABLISHED
+
+PS C:\Users\stage_gbaglioni> ping 192.168.1.10
+
+Esecuzione di Ping 192.168.1.10 con 32 byte di dati:
+Risposta da 192.168.1.10: byte=32 durata<1ms TTL=255
+Risposta da 192.168.1.10: byte=32 durata<1ms TTL=255
+Risposta da 192.168.1.10: byte=32 durata<1ms TTL=255
+Risposta da 192.168.1.10: byte=32 durata<1ms TTL=255
+
+Statistiche Ping per 192.168.1.10:
+    Pacchetti: Trasmessi = 4, Ricevuti = 4,
+    Persi = 0 (0% persi),
+Tempo approssimativo percorsi andata/ritorno in millisecondi:
+    Minimo = 0ms, Massimo =  0ms, Medio =  0ms
+
+
+
+
+
+Risultati Terminale (COM5):
+
+-----lwIP TCP echo server ------
+TCP packets sent to port 6001 will be echoed back
+link speed for phy address 0: 1000
+Board IP: 192.168.1.10
+Netmask : 255.255.255.0
+Gateway : 192.168.1.1
+TCP echo server started @ port 7
+
+
+
+
+
+Struttura xtopology[] cambiata:
+
+struct xtopology_t xtopology[] = {
+    {
+        0xFF0C0000,                // [1] base address di GEM1
+        xemac_type_emacps,        // [2] tipo EMAC
+        0x0,                       // [3] PHY address (Cambiato con 0x08)
+        0x0,                       // [4] non sempre usato (può essere PHY type o flags)
+        0xF8F00100,                // [5] base address del MDIO o altro registro
+        XPAR_XEMACPS_1_INTR,      // [6] interrupt ID
+    },
+
+
+
+
+
+File xadapter.c aggiornato:
+
+/*
+ * xemac_add: this is a wrapper around lwIP's netif_add function.
+ * The objective is to provide portability between the different Xilinx MAC's
+ * This function can be used to add both xps_ethernetlite and xps_ll_temac
+ * based interfaces
+ */
+struct netif *
+xemac_add(struct netif *netif,
+	ip_addr_t *ipaddr, ip_addr_t *netmask, ip_addr_t *gw,
+	unsigned char *mac_ethernet_address,
+	UINTPTR mac_baseaddr)
+{
+	int i;
+	struct netif * nif = NULL;
+
+	/* set mac address */
+	netif->hwaddr_len = 6;
+	for (i = 0; i < 6; i++)
+		netif->hwaddr[i] = mac_ethernet_address[i];
+
+	/* initialize based on MAC type */
+		switch (find_mac_type(mac_baseaddr)) {
+			case xemac_type_xps_emaclite:
+#ifdef XLWIP_CONFIG_INCLUDE_EMACLITE
+				nif = netif_add(netif, ipaddr, netmask, gw,
+					(void*)(UINTPTR)mac_baseaddr,
+					xemacliteif_init,
+#if NO_SYS
+					ethernet_input
+#else
+					tcpip_input
+#endif
+					);
+#else
+				nif = NULL;
+#endif
+				break;
+			case xemac_type_axi_ethernet:
+#ifdef XLWIP_CONFIG_INCLUDE_AXI_ETHERNET
+					nif = netif_add(netif, ipaddr, netmask, gw,
+					(void*)(UINTPTR)mac_baseaddr,
+					xaxiemacif_init,
+#if NO_SYS
+					ethernet_input
+#else
+					tcpip_input
+#endif
+					);
+#else
+				nif = NULL;
+#endif
+				break;
+#if defined (__arm__) || defined (__aarch64__)
+			case xemac_type_emacps:
+#ifdef XLWIP_CONFIG_INCLUDE_GEM
+                nif = netif_add(netif, ipaddr, netmask, gw,
+						(void*)(UINTPTR)mac_baseaddr,
+						xemacpsif_init,
+#if NO_SYS
+						ethernet_input
+#else
+						tcpip_input
+#endif
+
+						);
+#endif
+#endif
+                break;
+			default:
+				xil_printf("unable to determine type of EMAC with baseaddress 0x%08x\r\n",
+						mac_baseaddr);
+	}

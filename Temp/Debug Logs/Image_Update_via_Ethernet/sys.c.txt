@@ -1,0 +1,110 @@
+Per andare dentro una cartella
+
+cd "C:\Users\stage_gbaglioni\workspace\Immagine_A_system\Debug\sd_card"
+
+
+
+Per unire due file dentro uno
+
+copy /b header.txt + BOOT.BIN full_message.bin
+
+
+
+Per lanciare un file su ethernet
+
+"C:\Program Files (x86)\Nmap\ncat.exe" 192.168.1.10 1234 < "C:\Users\stage_gbaglioni\Vitis\ImageUpdateviaEthernetA_system\Debug\sd_card\full_message.bin"
+
+
+
+HO DOVUTO CAMBIARE IL CARATTERE SEPARATORE IN "/" CIOè 0x2F
+
+
+
+Test della funzione StartImgUpload(): 
+
+(caso Payload troppo corto) = Errore: payload troppo corto, nessun dato 			      immagine presente
+			      Errore nell'upload dell'immagine
+
+
+
+Test dell'Upload dell'Immagine A:
+
+- Inizio con la scheda contenente l'immagine A
+
+Xilinx Zynq MP First Stage Boot Loader 
+Release 2022.2   Sep 16 2025  -  10:42:56
+PMU-FW is not running, certain applications may not be supported.
+
+Ciao! Sono l'immagine A
+
+
+- Cancellazione dell'Immagine A:
+
+...
+
+Sector Erase su ADDR: 0x00EF0000
+
+ Image erase completato con successo
+
+
+- Riavvio della scheda:
+
+Xilinx Zynq MP First Stage Boot Loader 
+Release 2022.2   Sep 16 2025  -  10:42:56
+PMU-FW is not running, certain applications may not be supported.
+
+Ciao! Sono l'immagine B
+
+
+- Upload dell'immagine A
+
+Ricevuto blocco aggiuntivo (202 byte), Scrittura in 0x0099153E, Dati da scrivere rimanenti 202, IsLast 1
+Scritti gli ultimi pendingdata
+Connessione server chiusa
+
+
+- Riavvio della scheda 
+
+Xilinx Zynq MP First Stage Boot Loader 
+Release 2022.2   Sep 16 2025  -  10:42:56
+PMU-FW is not running, certain applications may not be supported.
+
+Ciao! Sono l'immagine A
+
+
+- Considerazioni
+
+Il caricamento dell'immagine è avvenuto con successo, il server riesce correttamente a gestire tutto il payload e scriverlo correttamente nella QSPI. 
+Ci sono dei problemi però con il FSBL, senza premere il pulsante FWUEN della scheda non è ne possibile comunicare con la scheda tramite JTAG ne al riavvio viene avviato il FSBL, quando si prova a fare comunicazione JTAG viene presentato il seguente errore: 
+
+Could not find ARM device on the board for connection 'Local'.
+Check if the target is in:
+1. Split JTAG - No operations are possible with ARM DAP.
+2. Non JTAG bootmode - Bootrom may need time to enable DAP.
+Please try again.
+
+
+Troubleshooting hints:
+1. Check whether board is connected to system properly.
+2. In case of zynq board, check whether Digilent/Xilinx cable switch settings are correct.
+3. If you are using Xilinx Platform Cable USB, ensure that status LED is green.
+Could not find ARM device on the board for connection 'Local'.
+Check if the target is in:
+1. Split JTAG - No operations are possible with ARM DAP.
+2. Non JTAG bootmode - Bootrom may need time to enable DAP.
+Please try again.
+
+
+Troubleshooting hints:
+1. Check whether board is connected to system properly.
+2. In case of zynq board, check whether Digilent/Xilinx cable switch settings are correct.
+3. If you are using Xilinx Platform Cable USB, ensure that status LED is green.
+
+Il FSBL viene avviato correttamente solo dopo che viene caricata l'immagine A tramite la mia applicazione.
+Da verificare/capire perché dopo l'Upload dell'immagine la connessione del server viene chiusa.
+
+
+Nonostante arriva il messaggio della connessione server chiusa i messaggi risultano sempre sulla connessione 1
+
+
+Bisogna trovare un modo per lanciare il RST del sistema Runtime

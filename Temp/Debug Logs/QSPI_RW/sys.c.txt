@@ -1,0 +1,212 @@
+Test di ReadPersistentRegister():
+
+Boot Image Info:
+  IdStr: ABUM
+  Version: 0x00000001
+  Length: 0x00000004 (4 bytes)
+  Checksum: 0xAFB1BDB8
+  Persistent State:
+    LastBootedImg: 1
+    RequestedBootImg: 0
+    ImgBBootable: 1
+    ImgABootable: 0
+  Boot Image A Offset: 0x00200000
+  Boot Image B Offset: 0x00F80000
+  Recovery Image Offset: 0x01E00000
+
+
+
+Test di WritePersistentRegister():
+
+WritePersistentRegister(REQUESTED_BOOT_IMG_B_ID, IMG_A_BOOTABLE, IMG_B_BOOTABLE);
+
+Config found
+Initialization done
+Set options done
+Set prescaler done
+Flash selected
+Enter 4 byte address mode command succesfully sent
+QSPI init done
+
+Lettura su indirizzo 0x00120000
+
+Boot Image Info:
+  IdStr: ABUM
+  Version: 0x00000001
+  Length: 0x00000004 (4 bytes)
+  Checksum: 0xAFB1BDB8
+  Persistent State:
+    LastBootedImg: 1
+    RequestedBootImg: 0
+    ImgBBootable: 1
+    ImgABootable: 0
+  Boot Image A Offset: 0x00200000
+  Boot Image B Offset: 0x00F80000
+  Recovery Image Offset: 0x01E00000
+
+Write Enable abilitato:
+
+Flag Status Register: 0x81
+Status Register: 0x02
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Sector Erase su ADDR: 0x00100000
+
+Flag Status Register: 0x01
+Status Register: 0x03
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFF
+-> Il settore sta venendo cancellato
+
+Flag Status Register: 0x01
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Il settore sta venendo cancellato
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Il settore ï¿½ stato cancellato
+
+Write Enable abilitato:
+
+Flag Status Register: 0x81
+Status Register: 0x02
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Scrittura su indirizzo 0x00100000
+
+Flag Status Register: 0x01
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Scrittura in corso
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Scrittura completata
+
+Lettura su indirizzo 0x00100000
+
+Boot Image Info:
+  IdStr: ABUM
+  Version: 0x00000001
+  Length: 0x00000004 (4 bytes)
+  Checksum: 0xAFB1BDB8
+  Persistent State:
+    LastBootedImg: 1
+    RequestedBootImg: 1
+    ImgBBootable: 1
+    ImgABootable: 1
+  Boot Image A Offset: 0x00200000
+  Boot Image B Offset: 0x00F80000
+  Recovery Image Offset: 0x01E00000
+Xilinx Zynq MP First Stage Boot Loader 
+Release 2022.2   Sep 16 2025  -  10:42:56
+
+WritePersistentRegister(REQUESTED_BOOT_IMG_A_ID, IMG_A_NON_BOOTABLE, IMG_B_NON_BOOTABLE);
+
+Config found
+Initialization done
+Set options done
+Set prescaler done
+Flash selected
+Enter 4 byte address mode command succesfully sent
+QSPI init done
+
+Lettura su indirizzo 0x00120000
+
+Boot Image Info:
+  IdStr: ABUM
+  Version: 0x00000001
+  Length: 0x00000004 (4 bytes)
+  Checksum: 0xAFB1BDB8
+  Persistent State:
+    LastBootedImg: 1
+    RequestedBootImg: 0
+    ImgBBootable: 1
+    ImgABootable: 0
+  Boot Image A Offset: 0x00200000
+  Boot Image B Offset: 0x00F80000
+  Recovery Image Offset: 0x01E00000
+
+Write Enable abilitato:
+
+Flag Status Register: 0x81
+Status Register: 0x02
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Sector Erase su ADDR: 0x00100000
+
+Flag Status Register: 0x01
+Status Register: 0x03
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFF
+-> Il settore sta venendo cancellato
+
+Flag Status Register: 0x01
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Il settore sta venendo cancellato
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Il settore ï¿½ stato cancellato
+
+Write Enable abilitato:
+
+Flag Status Register: 0x81
+Status Register: 0x02
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Scrittura su indirizzo 0x00100000
+
+Flag Status Register: 0x01
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Scrittura in corso
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Scrittura completata
+
+Lettura su indirizzo 0x00100000
+
+Boot Image Info:
+  IdStr: ABUM
+  Version: 0x00000001
+  Length: 0x00000004 (4 bytes)
+  Checksum: 0xAFB1BDB8
+  Persistent State:
+    LastBootedImg: 1
+    RequestedBootImg: 0
+    ImgBBootable: 0
+    ImgABootable: 0
+  Boot Image A Offset: 0x00200000
+  Boot Image B Offset: 0x00F80000
+  Recovery Image Offset: 0x01E00000
+
+IL REGISTRO DI BACKUP NON VIENE AGGIORNATO AL RIAVVIO DELLA SCHEDA.
+IL TEMPO CHE RICHIEDE VITIS PER SCRIVERE UN IMMAGINE IN FLASH SONO 72 SEC
+
+
+
+Test di ImageErase():
+
+La funzione cancella l'immagine senza problemi per verificarlo ho cancellato l'immagine A e lui dopo un riavvio della scheda è partito in automatico con l'immagine B.
+
+L'IMMAGINE CON CUI LA SCHEDA PARTE è LA A NONOSTANTE SUL REGISTRO DI BACKUP CI STA SCRITTO CHE SIA LA B

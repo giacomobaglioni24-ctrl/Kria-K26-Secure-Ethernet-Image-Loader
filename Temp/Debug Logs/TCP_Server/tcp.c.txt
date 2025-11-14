@@ -1,0 +1,55 @@
+Richieste GET già scritte in esadecimale (Da aggiungere il delimitatore finale DEADBEEF in esadecimale)
+
+
+GET\nboot_img_status\n → 47 45 54 0A 62 6F 6F 74 5F 69 6D 67 5F 73 74 61 74 75 73 0A DE AD BE EF
+
+
+GET\nflash_erase_imgA\n → 47 45 54 0A 66 6C 61 73 68 5F 65 72 61 73 65 5F 69 6D 67 41 0A DE AD BE EF
+
+
+GET\nflash_erase_imgB\n → 47 45 54 0A 66 6C 61 73 68 5F 65 72 61 73 65 5F 69 6D 67 42 0A DE AD BE EF
+
+
+GET\nflash_erase_status\n → 47 45 54 0A 66 6C 61 73 68 5F 65 72 61 73 65 5F 73 74 61 74 75 73 0A DE AD BE EF
+
+
+
+
+Debug lato terminale (COM5): 
+
+-----lwIPv4 TCP echo server ------
+TCP packets sent to port 6001 will be echoed back
+link speed for phy address 0: 1000
+Board IP: 192.168.1.10
+Netmask : 255.255.255.0
+Gateway : 192.168.1.1
+TCP echo server started @ port 1234
+Connessione 1 stabilita
+Processando il primo pacchetto
+Richiesta GET/HEAD ricevuta
+Offset iniziale: 2659258
+Offset finale: 2659272
+Nome del file richiesto: boot_img_status
+Richiesta di stato dell'immagine di boot
+Delimitatore trovato
+Processando il primo pacchetto
+Richiesta GET/HEAD ricevuta
+Offset iniziale: 2643130
+Offset finale: 2643145
+Nome del file richiesto: flash_erase_imgA
+Richiesta di cancellazione dell'immagine A
+Delimitatore trovato
+Processando il primo pacchetto
+Richiesta GET/HEAD ricevuta
+Offset iniziale: 2610874
+Offset finale: 2610889
+Nome del file richiesto: flash_erase_imgB
+Richiesta di cancellazione dell'immagine B
+Delimitatore trovato
+Processando il primo pacchetto
+Richiesta GET/HEAD ricevuta
+Offset iniziale: 2603706
+Offset finale: 2603723
+Nome del file richiesto: flash_erase_status
+Richiesta di stato della cancellazione flash
+Delimitatore trovato

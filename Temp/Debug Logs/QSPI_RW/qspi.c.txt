@@ -1,0 +1,402 @@
+Terminale quando sono riuscito a leggere FFFFFFFF (rx_buf[8]), commando 0x6C:
+
+Config found
+Initialization done
+Set options done
+Set prescaler done
+Flash selected
+Read command: 0x6C
+Enter 4 byte address mode command succesfully sent
+QSPI init done
+
+Enhanced Volatile Configuration Register: 0xFF
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0xFFFFFFFF
+Byte 4: 0xFFFFFFFF
+
+
+Flag Register: 0x81
+
+Status Register: 0x81
+
+Status Register: 0x81
+
+Sector Erase su ADDR: 0x022A0000
+Sector Erase Iniziato
+
+Flag Register: 0x01
+Il settore sta venendo cancellato
+
+Flag Register: 0x81
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0xFFFFFFFF
+Byte 4: 0xFFFFFFFF
+
+Byte 8: 0x4B210100
+
+Flag Register: 0x81
+
+Scrittura su indirizzo 0x022A0000
+Scrittura iniziata.
+
+Flag Register: 0x81
+
+Flag Register: 0x81
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0xFFFFFFFF
+Byte 4: 0xFFFFFFFF
+
+
+Flag Register: 0x81
+
+
+Terminale quando sono riuscito a leggere DEADBEEF (rx_buf[12]), commando 0x6C:
+
+Config found
+Initialization done
+Set options done
+Set prescaler done
+Flash selected
+Read command: 0x6C
+Enter 4 byte address mode command succesfully sent
+QSPI init done
+
+Enhanced Volatile Configuration Register: 0xFF
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0x00550100
+Byte 4: 0x00000000
+Byte 8: 0x4B210100
+
+Flag Register: 0x81
+
+Status Register: 0x81
+
+Status Register: 0x81
+
+Sector Erase su ADDR: 0x022A0000
+Sector Erase Iniziato
+
+Flag Register: 0x01
+Il settore sta venendo cancellato
+
+Flag Register: 0x81
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0x00550100
+Byte 4: 0x00000000
+Byte 8: 0x4B210100
+
+Flag Register: 0x81
+
+Scrittura su indirizzo 0x022A0000
+Scrittura iniziata.
+
+Flag Register: 0x81
+
+Flag Register: 0x81
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0x00550100
+Byte 4: 0x00000000
+Byte 8: 0xDEADBEEF
+
+Flag Register: 0x81
+
+
+Terminale con il commando 0x13 rx_buf[8]
+
+Config found
+Initialization done
+Set options done
+Set prescaler done
+Flash selected
+Read command: 0x6C
+Enter 4 byte address mode command succesfully sent
+QSPI init done
+
+Enhanced Volatile Configuration Register: 0xFF
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0x4B210100
+Byte 4: 0x00000000
+
+Flag Register: 0x81
+
+Status Register: 0x81
+
+Status Register: 0x81
+
+Status Register: 0x81
+
+Sector Erase su ADDR: 0x022A0000
+Sector Erase Iniziato
+
+Flag Register: 0x01
+Il settore sta venendo cancellato
+
+Flag Register: 0x81
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0x4B210100
+Byte 4: 0x00000000
+
+Flag Register: 0x81
+
+Status Register: 0x81
+
+Status Register: 0x81
+
+Scrittura su indirizzo 0x022A0000
+Scrittura iniziata.
+
+Flag Register: 0x81
+
+Flag Register: 0x81
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0xDEADBEEF
+Byte 4: 0x00000000
+
+Flag Register: 0x81
+
+
+Terminale con rx_buf[4], comando 0x6C, precendentemente era stato scritto 0xDDCCBBAA
+
+Config found
+Initialization done
+Set options done
+Set prescaler done
+Flash selected
+Read command: 0x6C
+Enter 4 byte address mode command succesfully sent
+QSPI init done
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0xDDCCBBAA
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Write Enable abilitato:
+
+Flag Status Register: 0x81
+Status Register: 0x02
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Sector Erase su ADDR: 0x022A0000
+
+Flag Status Register: 0x01
+Status Register: 0x03
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFF
+-> Il settore sta venendo cancellato
+
+Flag Status Register: 0x01
+Status Register: 0x03
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Il settore sta venendo cancellato
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Il settore è stato cancellato
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0xFFFFFFFF
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Write Enable abilitato:
+
+Flag Status Register: 0x81
+Status Register: 0x02
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Scrittura su indirizzo 0x022A0000
+
+Flag Status Register: 0x01
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Scrittura in corso
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Scrittura completata
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0xDEADBEEF
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+
+Terminale con rx_buf[16], comando 0x6C:
+
+Config found
+Initialization done
+Set options done
+Set prescaler done
+Flash selected
+Read command: 0x6C
+Enter 4 byte address mode command succesfully sent
+QSPI init done
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0x00550100
+Byte 4: 0x00000000
+Byte 8: 0x4B210100
+Byte 12: 0x00000000
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Write Enable abilitato:
+
+Flag Status Register: 0x81
+Status Register: 0x02
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Sector Erase su ADDR: 0x022A0000
+
+Flag Status Register: 0x01
+Status Register: 0x03
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFF
+-> Il settore sta venendo cancellato
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Il settore è stato cancellato
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0x00550100
+Byte 4: 0x00000000
+Byte 8: 0x4B210100
+Byte 12: 0x00000000
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Write Enable abilitato:
+
+Flag Status Register: 0x81
+Status Register: 0x02
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Scrittura su indirizzo 0x022A0000
+
+Flag Status Register: 0x01
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Scrittura in corso
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Scrittura completata
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0xAAAAAAAA
+Byte 4: 0xBBBBBBBB
+Byte 8: 0xCCCCCCCC
+Byte 12: 0xDDDDDDDD
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+
+Terminale con rx_buf[32], comando 0x6C:
+
+Config found
+Initialization done
+Set options done
+Set prescaler done
+Flash selected
+Enter 4 byte address mode command succesfully sent
+QSPI init done
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0xDEADBEEF
+Byte 4: 0xAAAAAAAA
+Byte 8: 0xDEADBEEF
+Byte 12: 0xAAAAAAAA
+Byte 16: 0xCCCCCCCC
+Byte 20: 0xDDDDDDDD
+Byte 24: 0xFFFFFFFF
+Byte 28: 0xFFFFFFFF
+
+Write Enable abilitato:
+
+Flag Status Register: 0x81
+Status Register: 0x02
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+
+Sector Erase su ADDR: 0x022A0000
+
+Flag Status Register: 0x01
+Status Register: 0x03
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFF
+-> Il settore sta venendo cancellato
+
+Flag Status Register: 0x81
+Status Register: 0x00
+Enhanced Volatile Configuration Register: 0xFF
+Volatile Configuration Register: 0xFB
+-> Il settore ï¿½ stato cancellato
+
+Lettura su indirizzo 0x022A0000
+Byte 0: 0xFFFFFFFF
+Byte 4: 0xFFFFFFFF
+Byte 8: 0xFFFFFFFF
+Byte 12: 0xFFFFFFFF
+Byte 16: 0xFFFFFFFF
+Byte 20: 0xFFFFFFFF
+Byte 24: 0xFFFFFFFF
+Byte 28: 0xFFFFFFFF

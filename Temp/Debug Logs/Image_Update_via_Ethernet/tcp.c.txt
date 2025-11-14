@@ -1,0 +1,84 @@
+Funzioni di ProcessGetReq da testare: 
+
+
+- boot_img_status: (47 45 54 2F 62 6F 6F 74 5F 69 6D 67 5F 73 74 61 74 75 73 2F)
+
+Connessione 1: ricevuto pacchetto 1 (20 bytes totali)
+Processando il primo pacchetto
+Nome del file richiesto: boot_img_status
+
+Lettura su indirizzo 0x00100000
+  Persistent State:
+    LastBootedImg: 1
+    RequestedBootImg: 0
+    ImgBBootable: 1
+    ImgABootable: 1
+
+
+- flash_erase_imgA: (47 45 54 2F 66 6C 61 73 68 5F 65 72 61 73 65 5F 69 6D 67 41 2F)
+
+SUCCESSO
+
+
+- flash_erase_imgB: (47 45 54 2F 66 6C 61 73 68 5F 65 72 61 73 65 5F 69 6D 67 42 2F)
+
+SUCCESSO
+
+
+- RequestTooLong:
+
+Connessione 1: ricevuto pacchetto 1 (980 bytes totali)
+Processando il primo pacchetto
+Richiesta troppo lunga
+
+
+- Richiesta non Riconosciuta:
+
+Connessione 1: ricevuto pacchetto 1 (22 bytes totali)
+Processando il primo pacchetto
+Nome del file richiesto: flashU_erase_imgB
+Richiesta non riconosciuta
+
+
+
+
+Funzioni di ProcessPostReq da testare:
+
+
+- Upload_Img_A: (50  4F  53  54  2F  55  70  6C  6F  61  64  5F  49  6D  67  5F  41  2F) (RICORDATI DI AGGIUNGERE 8 BYTE DI IMAGE LENGHT)
+
+Connessione 1: ricevuto pacchetto 1 (18 bytes totali)
+Processando il primo pacchetto
+Nome del file richiesto: Upload_Img_A
+Riconosciuta richiesta di Upload dell'immagine A
+
+
+- Upload_Img_B: (50  4F  53  54  2F  55  70  6C  6F  61  64  5F  49  6D  67  5F  42  2F) (RICORDATI DI AGGIUNGERE 8 BYTE DI IMAGE LENGHT)
+
+Connessione 1: ricevuto pacchetto 1 (18 bytes totali)
+Processando il primo pacchetto
+Nome del file richiesto: Upload_Img_B
+Riconosciuta richiesta di Upload dell'immagine B
+
+
+- Richiesta non Riconosciuta:
+
+Connessione 1: ricevuto pacchetto 1 (18 bytes totali)
+Processando il primo pacchetto
+Nome del file richiesto: Img_Update_A
+Non Ã¨ stata riconosciuta nessuna richiesta di POST
+
+
+- ExtractImgLength:
+
+(Caso ImgLenght assente) = Messaggio troppo corto per contenere ImgLenght
+		           Lunghezza immagine non valida
+
+(Caso ImgLenght troppo grande) = Lunghezza immagine estratta: 0xFF676545 				 (4284966213 byte)
+				 Lunghezza immagine non valida
+
+
+
+HO DOVUTO CAMBIARE IL CARATTERE SEPARATORE IN "/" CIOè 0x2F
+
+

@@ -1,0 +1,44 @@
+vsim -voptargs="+acc" work.tb_AES128_CTR_Encrypter
+
+add wave -position insertpoint  \
+sim:/tb_AES128_CTR_Encrypter/AES128CTRENCRYPTER_i_CLK \
+sim:/tb_AES128_CTR_Encrypter/AES128CTRENCRYPTER_i_RST \
+sim:/tb_AES128_CTR_Encrypter/m_axis_tdata \
+sim:/tb_AES128_CTR_Encrypter/m_axis_tlast \
+sim:/tb_AES128_CTR_Encrypter/m_axis_tready \
+sim:/tb_AES128_CTR_Encrypter/m_axis_tvalid \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_m_axis_tdata \
+sim:/tb_AES128_CTR_Encrypter/s_axis_tdata \
+sim:/tb_AES128_CTR_Encrypter/s_axis_tlast \
+sim:/tb_AES128_CTR_Encrypter/s_axis_tready \
+sim:/tb_AES128_CTR_Encrypter/s_axis_tvalid \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_s_axis_tdata \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_key_ready \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_keynumber \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_key \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_counter_inc \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_counter_out \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_fsm_loadnonce \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_nonce \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_aes_input \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_aes_feedback \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_aes_output \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_fsm_block \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_fsm_loadinput \
+sim:/tb_AES128_CTR_Encrypter/uut/sv_fsm_loadoutput \
+sim:/tb_AES128_CTR_Encrypter/uut/AESFSM_Inst/sv_state \
+sim:/tb_AES128_CTR_Encrypter/uut/AESFSM_Inst/sv_next_state
+
+run 5us
+
+
+
+input:
+00112233445566778899AABBCCDDEEFF
+000102030405060708090A0B0C0D0E0F
+FFEEDDCCBBAA99887766554433221100
+
+output:
+00112233445566778899AABBCCDDEEFF
+F7A9F8D2118DD45C11E29F2C2BDA8131
+D786F14BF49F8726D4717AB0348AA828
