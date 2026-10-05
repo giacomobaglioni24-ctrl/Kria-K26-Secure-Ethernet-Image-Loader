@@ -1,81 +1,70 @@
-Descrizione dell'Applicazione:
+Project Overview
 
-
-Il sistema riceve i dati cifrati tramite Ethernet, gestiti dal Processing System (PS) che li memorizza in DDR4. Successivamente, un AXI DMA 
-trasferisce i dati alla Programmable Logic, dove un IP custom esegue la decrittazione AES128 in modalità CTR attraverso un’interfaccia AXI4-Stream. 
-I dati decrittati vengono riportati in DDR4 tramite lo stesso DMA e infine il PS li scrive nella QSPI Flash, completando il processo di
-aggiornamento sicuro delle immagini di boot.
+The system receives encrypted data via Ethernet, managed by the Processing System (PS), which temporarily stores it in the DDR4 memory. Subsequently, an AXI DMA transfers the data to the Programmable Logic (PL), where a custom IP performs AES-128 CTR decryption using an AXI4-Stream interface. The decrypted data is then routed back to the DDR4 memory via the same DMA. Finally, the PS writes the data into the QSPI Flash, successfully completing the secure boot image update process.
 
 
 
+Repository Structure
 
-
-Organizzazione delle cartelle:
-
-
-	- Python: Sono presenti tutti gli script python per leggere, criptare e incapsulare i file
-
-	- Vitis: Sono presenti l'applicazione con tutti i suoi Driver (QSPI, DMA, TCP) e la Platform su cui è stata utilizzata
-
-	- Vivado: Sono presenti tutti i file di codice del custom IP "AXI4-Stream AES128 CTR Decrypter" con il relativo Test Bench
-		  e le configurazioni dell'IP, è anche presente un immagine del BD con tutti i suoi IP contenuti e il suo file .xsa
+Python: Contains all Python scripts used for reading, encrypting, and encapsulating files.
+Vitis: Includes the baremetal application along with its peripheral drivers (QSPI, DMA, TCP) and the hardware platform description.
+Vivado: Contains the source code for the custom "AXI4-Stream AES128 CTR Decrypter" IP, its testbench, and the IP configurations. It also includes an image of the Block Design (BD) with all instantiated IPs and the exported `.xsa` hardware handoff file.
 
 
 
+Python Scripts Usage
 
 
-Istruzioni per l'uso degli script Python:
+print_hex.py
+Reads a file of any extension and prints its hexadecimal representation to the terminal.
+
+bash
+python print_hex.py -i "<File_to_read>"
 
 
-	- print_hex.py: Utilizzabile per la lettura di file di qualsiasi estensione in esadecimale, restituisce l'output sul terminale
+encrypt.py
+Encrypts a file of any extension using the AES-128 CTR protocol with a user-defined symmetric key (the counter value starts at 1, but can be modified directly in the source code). It takes the input file and the key as arguments, outputs the encrypted file, and prints the "Nonce" required for decryption to the terminal.
 
-			python print_hex.py -i "Nome File da leggere"
+bash
+python encrypt.py -i BOOT.bin -o Image.bin -k 00112233445566778899AABBCCDDEEFF
 
-	- encrypt.py: Utilizzabile per criptare un file di qualsiasi estensione utilizzando il protocollo AES-128 CTR scegliendo la chiave
-		      simmetrica (Il valore del counter parte da 1 ma si può cambiare modificando il codice). Come input prende il file
-		      da Criptare e la chiave e restituisce l'output in un altro file a parte e il "Nonce" da utilizzare per la decriptazione
-		      sul terminale
+(Note: The default key embedded in the `.xsa` file is `0x7C9A3F1E4B2D8A6F0E5C1D7B3A9F4E2C`)
 
-		      python encrypt.py -i BOOT.bin -o Image.bin -k 00112233445566778899AABBCCDDEEFF
-	
-		      (La chiave contenuta nel file .xsa è 0x7C9A3F1E4B2D8A6F0E5C1D7B3A9F4E2C)
 
-	- encapsulate.py: Utilizzabile per incapsulare una Richiesta, un Nonce e un File in un unico file, calcola in automatico la lunghezza
-			  del file Image.bin + 16 byte di Nonce in HEX e li mette sotto forma di 8 caratteri ASCII dopo la richiesta
+encapsulate.py
+Encapsulates a Request, a Nonce, and a File into a single binary file. It automatically calculates the payload length (`Image.bin` + 16 bytes of Nonce) in HEX format and appends it as an 8-character ASCII string immediately following the request header.
 
-			  python .\encapsulate.py -p POST/Upload_Img_A/ -x 00112233445566778899AABBCCDDEEFF -i Image.bin -o fullmessage.bin
+bash
+python encapsulate.py -p POST/Upload_Img_A/ -x 00112233445566778899AABBCCDDEEFF -i Image.bin -o fullmessage.bin
 
 
 
+Application Usage (TCP Server)
 
+Upon board boot-up from the QSPI flash image, the system initializes for a few seconds before the TCP server becomes available for client connections.
 
-Istruzioni per l'uso dell'applicazione:
+Default IP and Port: 192.168.1.10 : 1234
+(These parameters, as well as an optional Gateway, can be modified in `network.c`)
 
+Once connected, the client can send the following requests:
 
-All'avvio della scheda, con l'immagine caricata in QSPI, passeranno alcuni secondi e poi sarà possibile connettersi al server TCP come client
+GET/boot_img_status/
+Returns the current contents of the Image Selector registers.
 
+GET/flash_erase_imgA/
+Initiates the erase process for Image A and sends a notification upon completion.
 
-L'IP e la porta sono i seguenti: 192.168.1.10 1234		(Possono essere cambiati in "network.c" e si può anche aggiungere un Gateway)
+GET/flash_erase_imgB/
+Initiates the erase process for Image B and sends a notification upon completion.
 
+POST/Upload_Img_A/XXXXXXXXBOOT.bin
+Starts uploading the `BOOT.bin` file to the Image A offset. The `XXXXXXXX` field consists of 8 ASCII characters (interpreted as HEX) indicating the exact length of the image payload. A completion notification is sent once the upload finishes.
 
-Una volta connessi potranno essere inviate le seguenti richieste:
+POST/Upload_Img_B/XXXXXXXXBOOT.bin
+Starts uploading the `BOOT.bin` file to the Image B offset. It behaves exactly like the Image A upload, using the same 8-character ASCII length field structure.
 
-	- GET/boot_img_status/		Restituisce il contenuto dei registri dell'Image Selector
+Payload Formatting:
+The `BOOT.bin` file sent to the server must strictly follow this internal structure:
+`Request` `Nonce` `EncryptedImage`
 
-	- GET/flash_erase_imgA/		Avvia l'erase dell'immagine A con notifica alla fine
-
-	- GET/flash_erase_imgB/		Avvia l'erase dell'immagine B con notifica alla fine
-
-	- POST/Upload_Img_A/XXXXXXXXBOOT.bin	Avvia il caricamento del file "BOOT.bin" all'offset dell'immagine A, il campo "XXXXXXXX" sono 
-						8 caratteri ASCII che vengono interpretati come 8 caratteri HEX e indicano la lunghezza 
-						esclusivamente dell'immagine, si riceve una notifica una volta finito l'Upload 
-
-	- POST/Upload_Img_B/XXXXXXXXBOOT.bin	Avvia il caricamento del file "BOOT.bin" all'offset dell'immagine B, il campo "XXXXXXXX" sono 
-						8 caratteri ASCII che vengono interpretati come 8 caratteri HEX e indicano la lunghezza 
-						esclusivamente dell'immagine, si riceve una notifica una volta finito l'Upload 
-
-
-Il file "BOOT.bin"che deve essere mandato deve avere la seguente struttura: 	Richiesta|Nonce|ImmagineCriptata
-
-Si può sfruttare lo script python "encapsulate.py" (Il carattere "|" non deve essere incluso e non c'è nessuno spazio tra i vari componenti del file)
-
+You can use the `encapsulate.py` script to generate this file automatically. (Note: there are no spaces or separation characters like "|" between the various components of the file; they must be strictly contiguous).
