@@ -1,4 +1,5 @@
-#Project Overview
+Project Overview
+
 The system receives encrypted data via Ethernet, managed by the Processing System (PS), which temporarily stores it in the DDR4 memory. Subsequently, an AXI DMA transfers the data to the Programmable Logic (PL), where a custom IP performs AES-128 CTR decryption using an AXI4-Stream interface. The decrypted data is then routed back to the DDR4 memory via the same DMA. Finally, the PS writes the data into the QSPI Flash, successfully completing the secure boot image update process.
 
 
